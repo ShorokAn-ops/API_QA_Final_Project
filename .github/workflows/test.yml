@@ -1,0 +1,73 @@
+name: API_QA_Final_Project - Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      DB_BACKEND: "sqlite"
+      DATABASE_URL: "sqlite:///./test_invoices.db"
+      API_BASE_URL: "http://127.0.0.1:8081"
+
+      # ERPNext dummy credentials for testing
+      ERPNEXT_BASE_URL: "http://example.invalid"
+      ERPNEXT_API_KEY: "dummy"
+      ERPNEXT_API_SECRET: "dummy"
+
+      # Disable scheduler in tests
+      ENABLE_SCHEDULER: "false"
+
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+          pip install pytest httpx uvicorn
+
+      - name: Start FastAPI (uvicorn)
+        run: |
+          nohup python -m uvicorn app:app --host 127.0.0.1 --port 8081 > uvicorn.log 2>&1 &
+
+          echo "Waiting for API to be ready..."
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:8081/health > /dev/null 2>&1; then
+              echo "✓ API is up and responding"
+              break
+            fi
+            if [ $i -eq 30 ]; then
+              echo "✗ API failed to start"
+              cat uvicorn.log
+              exit 1
+            fi
+            echo "Attempt $i/30..."
+            sleep 2
+          done
+
+      - name: Run pytest
+        run: pytest -v --tb=short
+
+      - name: Upload uvicorn logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uvicorn-log
+          path: uvicorn.log
+          if-no-files-found: warn
