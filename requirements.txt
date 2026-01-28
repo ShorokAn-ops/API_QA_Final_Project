@@ -1,0 +1,36 @@
+# -------------------------
+# Web framework & server
+# -------------------------
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+
+# -------------------------
+# Configuration & settings
+# -------------------------
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+
+# -------------------------
+# Database / ORM
+# -------------------------
+sqlalchemy>=2.0.25
+
+# SQLite (built-in with Python, no package needed)
+# PostgreSQL (optional – uncomment if needed)
+# psycopg2-binary>=2.9.9
+
+# -------------------------
+# HTTP client (ERPNext)
+# -------------------------
+httpx>=0.26.0
+
+# -------------------------
+# Utilities
+# -------------------------
+python-dotenv>=1.0.1
+
+# -------------------------
+# (Optional but recommended)
+# -------------------------
+# For better performance with uvicorn
+watchfiles>=0.21.0
