@@ -118,6 +118,11 @@ class TestInvoicesAPI(unittest.TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.json()["data"], [])
 
+    def test_get_invoices_validation_limit_minus(self):
+        r = self.client.get("/invoices?limit=-10")
+        # FastAPI Query(ge=1) => 422
+        self.assertEqual(r.status_code, 422)
+
     def test_get_invoices_validation_limit_zero(self):
         r = self.client.get("/invoices?limit=0")
         # FastAPI Query(ge=1) => 422
