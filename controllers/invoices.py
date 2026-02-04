@@ -11,7 +11,7 @@ router = APIRouter(prefix="/invoices", tags=["invoices"])
 
 @router.get("", response_model=ApiResponse[list[InvoiceOut]])
 def get_invoices(
-    limit: int = Query(100, ge=1, le=500),
+    limit: int = Query(500, ge=1, le=500),
     include_items: bool = Query(True),
     db: Session = Depends(get_db),
 ):

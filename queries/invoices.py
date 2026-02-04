@@ -15,7 +15,7 @@ def get_invoice_by_invoice_id(db: Session, invoice_id: str) -> Invoice | None:
 
 
 
-def list_invoices(db: Session, limit: int = 100) -> list[Invoice]:
+def list_invoices(db: Session, limit: int = 500) -> list[Invoice]:
     return (
         db.query(Invoice)
         .options(joinedload(Invoice.items), joinedload(Invoice.risk))

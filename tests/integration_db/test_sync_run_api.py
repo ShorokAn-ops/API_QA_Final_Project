@@ -15,7 +15,7 @@ from models.risk import RiskAnalysis
 
 
 class _FakeERP:
-    async def list_purchase_invoices(self, limit: int = 50):
+    async def list_purchase_invoices(self, limit: int = 500):
         # ERPNext list endpoint returns minimal meta rows
         return [
             {

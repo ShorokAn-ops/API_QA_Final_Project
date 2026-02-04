@@ -63,7 +63,7 @@ class TestRiskAnomaliesAPI(unittest.TestCase):
     def test_anomalies_success_filtered(self):
         self._seed()
 
-        r = self.client.get("/risk/anomalies?min_rate=0.6&limit=100")
+        r = self.client.get("/risk/anomalies?min_rate=0.6&limit=500")
         self.assertEqual(r.status_code, 200)
 
         rows = r.json()["data"]
@@ -77,7 +77,7 @@ class TestRiskAnomaliesAPI(unittest.TestCase):
     def test_anomalies_success_empty(self):
         self._seed()
 
-        r = self.client.get("/risk/anomalies?min_rate=0.95&limit=100")
+        r = self.client.get("/risk/anomalies?min_rate=0.95&limit=500")
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.json()["data"], [])
 

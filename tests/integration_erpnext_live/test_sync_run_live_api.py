@@ -120,7 +120,7 @@ class TestSyncRunLiveAPI(unittest.TestCase):
         self.assertIn("last_modified_after", data)
 
         # Sanity: invoices endpoint should still respond after sync
-        r2 = self.client.get("/invoices?limit=50&include_items=true")
+        r2 = self.client.get("/invoices?limit=500&include_items=true")
         self.assertEqual(r2.status_code, 200, msg=r2.text)
         self.assertIn("data", r2.json())
 

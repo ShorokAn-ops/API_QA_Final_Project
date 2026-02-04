@@ -15,7 +15,7 @@ router = APIRouter(prefix="/risk", tags=["risk"])
 @router.get("/anomalies", response_model=ApiResponse[list[RiskOut]])
 def anomalies(
     min_rate: float = Query(0.6, ge=0.0, le=1.0),
-    limit: int = Query(100, ge=1, le=500),
+    limit: int = Query(500, ge=1, le=500),
     db: Session = Depends(get_db),
 ):
     """
