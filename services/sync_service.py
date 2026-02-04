@@ -79,16 +79,17 @@ class SyncService:
                     # no real change => do nothing
                     continue
 
-                inv = upsert_invoice_and_items(
-                    db,
-                    invoice_id=inv_id,
-                    supplier=meta.get("supplier"),
-                    posting_date=meta.get("posting_date"),
-                    grand_total=float(meta.get("grand_total") or 0),
-                    erp_modified=meta.get("modified"),
-                    items_hash=h,
-                    items=items,
-                )
+                invoice_data = {
+                    "invoice_id": inv_id,
+                    "supplier": meta.get("supplier"),
+                    "posting_date": meta.get("posting_date"),
+                    "grand_total": float(meta.get("grand_total") or 0),
+                    "erp_modified": meta.get("modified"),
+                    "items_hash": h,
+                }
+
+                inv = upsert_invoice_and_items(db, invoice_data=invoice_data, items=items)
+
                 updated_count += 1
 
                 # compute risk only when changed

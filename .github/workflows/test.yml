@@ -1,0 +1,42 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install coverage pytest
+
+      - name: Run tests
+        env:
+          ERPNEXT_BASE_URL: "http://localhost:8080"
+          ERPNEXT_API_KEY: "dummy"
+          ERPNEXT_API_SECRET: "dummy"
+          DATABASE_URL: "sqlite:///./ci_test.db"
+        run: |
+          coverage run -m pytest tests/ -v
+          coverage xml
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: false

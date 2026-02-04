@@ -10,7 +10,7 @@ class Invoice(Base):
     id = Column(Integer, primary_key=True)
     invoice_id = Column(String(140), unique=True, index=True, nullable=False)  # ERPNext "name"
     supplier = Column(String(255), index=True, nullable=True)
-    posting_date = Column(String(32), nullable=True)  # keep simple string; you can convert to Date later
+    posting_date = Column(String(32), nullable=True) 
     grand_total = Column(Float, nullable=True)
 
     erp_modified = Column(String(32), index=True, nullable=True)

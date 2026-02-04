@@ -34,3 +34,8 @@ python-dotenv>=1.0.1
 # -------------------------
 # For better performance with uvicorn
 watchfiles>=0.21.0
+
+# For AI integration (if AI features are used)openai>=1.0.0
+openai>=1.0.0
+
+requests>=2.31.0

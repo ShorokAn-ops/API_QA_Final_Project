@@ -10,7 +10,7 @@ class ERPClient:
             "Accept": "application/json",
         }
 
-    async def list_purchase_invoices(self, limit: int = 50) -> list[dict]:
+    async def list_purchase_invoices(self, limit: int = 500) -> list[dict]:
         """
         Minimal fields + modified for delta decisions.
         Works with ERPNext REST: /api/resource/Purchase Invoice
