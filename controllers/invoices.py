@@ -4,14 +4,14 @@ from sqlalchemy.orm import Session
 from db.session import get_db
 from queries.invoices import list_invoices
 from schemas.responses import ApiResponse
-from schemas.invoice import InvoiceOut, InvoiceItemOut
+from schemas.invoice import InvoiceOut, InvoiceItemOut, RiskAnalysisOut
 
 router = APIRouter(prefix="/invoices", tags=["invoices"])
 
 
 @router.get("", response_model=ApiResponse[list[InvoiceOut]])
 def get_invoices(
-    limit: int = Query(100, ge=1, le=500),
+    limit: int = Query(500, ge=1, le=500),
     include_items: bool = Query(True),
     db: Session = Depends(get_db),
 ):
@@ -36,6 +36,15 @@ def get_invoices(
                 for i in (inv.items or [])
             ]
 
+        # Serialize risk data if present
+        risk_out = None
+        if inv.risk:
+            risk_out = RiskAnalysisOut(
+                rate=inv.risk.rate,
+                risk_level=inv.risk.risk_level,
+                reasons=inv.risk.reasons if isinstance(inv.risk.reasons, list) else [],
+            )
+
         out.append(
             InvoiceOut(
                 invoice_id=inv.invoice_id,
@@ -44,6 +53,7 @@ def get_invoices(
                 grand_total=inv.grand_total,
                 erp_modified=inv.erp_modified,
                 items=items_out,
+                risk=risk_out,
             )
         )
 

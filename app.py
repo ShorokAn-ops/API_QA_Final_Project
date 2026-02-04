@@ -6,12 +6,18 @@ from core.config import settings
 from db.session import engine
 from models.base import Base
 
+# Import all models to register them with SQLAlchemy BEFORE any queries
+from models.invoice import Invoice, InvoiceItem
+from models.risk import RiskAnalysis
+from models.sync_state import SyncState
+
 from controllers.dashboard import router as dashboard_router
 from controllers.health import router as health_router
 from controllers.invoices import router as invoices_router
 from controllers.risk import router as risk_router
 from controllers.sync import router as sync_router
 
+from services.sync_service import SyncService
 from services.scheduler import Scheduler
 
 
@@ -25,6 +31,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+         "http://localhost:3001",
+        "http://127.0.0.1:3001",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -45,8 +53,8 @@ app.include_router(sync_router)
 # Controllers/services can use: from helpers import cache_get/cache_set
 app.state.ttl_cache = {}  # dict[str, (expires_at, data)]
 
-scheduler = Scheduler()
-
+sync_service = SyncService()
+scheduler = Scheduler(sync_service)
 
 @app.on_event("startup")
 async def on_startup():

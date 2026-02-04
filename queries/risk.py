@@ -28,7 +28,7 @@ def upsert_risk(
     db.commit()
 
 
-def list_anomalies(db: Session, min_rate: float = 0.6, limit: int = 100) -> list[Invoice]:
+def list_anomalies(db: Session, min_rate: float = 0.6, limit: int = 300) -> list[Invoice]:
     # invoices with risk >= min_rate
     return (
         db.query(Invoice)

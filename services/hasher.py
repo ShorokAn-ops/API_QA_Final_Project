@@ -1,21 +1,32 @@
 import hashlib
 import json
 
-
 def canonical_items(items: list[dict]) -> list[dict]:
-    clean = []
-    for it in items:
-        clean.append({
-            "item_code": it.get("item_code"),
-            "item_name": it.get("item_name"),
-            "qty": float(it["qty"]) if it.get("qty") is not None else None,
-            "rate": float(it["rate"]) if it.get("rate") is not None else None,
-            "amount": float(it["amount"]) if it.get("amount") is not None else None,
-            "idx": it.get("idx"),
-        })
-    # stable order
-    clean.sort(key=lambda x: (x.get("item_code") or "", x.get("item_name") or "", x.get("idx") or 0))
-    return clean
+    """
+    Normalize items for stable hashing:
+    - keep only meaningful fields
+    - normalize types
+    - strip strings
+    - sort deterministically
+    """
+    normalized: list[dict] = []
+
+    for it in items or []:
+        normalized.append(
+            {
+                "idx": int(it.get("idx") or 0),
+                "item_code": (it.get("item_code") or "").strip(),
+                "item_name": (it.get("item_name") or "").strip(),
+                "qty": float(it.get("qty") or 0),
+                "rate": float(it.get("rate") or 0),
+                "amount": float(it.get("amount") or 0),
+            }
+        )
+
+    # VERY IMPORTANT: deterministic order
+    normalized.sort(key=lambda x: (x["idx"], x["item_code"]))
+
+    return normalized
 
 
 def items_hash(items: list[dict]) -> str:
