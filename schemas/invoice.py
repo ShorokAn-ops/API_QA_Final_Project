@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Any
 
 
 class InvoiceItemOut(BaseModel):
@@ -10,6 +10,13 @@ class InvoiceItemOut(BaseModel):
     amount: Optional[float] = None
 
 
+class RiskAnalysisOut(BaseModel):
+    """Risk analysis data embedded in invoice response."""
+    rate: float
+    risk_level: str
+    reasons: List[Any] = []  # list of dicts with type, severity, message
+
+
 class InvoiceOut(BaseModel):
     invoice_id: str
     supplier: Optional[str] = None
@@ -18,3 +25,4 @@ class InvoiceOut(BaseModel):
     erp_modified: Optional[str] = None
 
     items: List[InvoiceItemOut] = []
+    risk: Optional[RiskAnalysisOut] = None

@@ -89,7 +89,7 @@ class TestInvoicesAPI(unittest.TestCase):
     def test_get_invoices_success_include_items_true(self):
         self._seed_invoice_with_items()
 
-        r = self.client.get("/invoices?limit=100&include_items=true")
+        r = self.client.get("/invoices?limit=300&include_items=true")
         self.assertEqual(r.status_code, 200)
 
         body = r.json()
@@ -106,7 +106,7 @@ class TestInvoicesAPI(unittest.TestCase):
     def test_get_invoices_success_include_items_false(self):
         self._seed_invoice_with_items()
 
-        r = self.client.get("/invoices?limit=100&include_items=false")
+        r = self.client.get("/invoices?limit=300&include_items=false")
         self.assertEqual(r.status_code, 200)
 
         inv = r.json()["data"][0]

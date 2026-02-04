@@ -16,7 +16,7 @@ class Invoice(Base):
     erp_modified = Column(String(32), index=True, nullable=True)
     items_hash = Column(String(64), index=True, nullable=True)
 
-    items = relationship("InvoiceItem", back_populates="invoice", cascade="all, delete-orphan")
+    items = relationship("InvoiceItem", back_populates="invoice", cascade="all, delete-orphan", passive_deletes=True)
     risk = relationship("RiskAnalysis", back_populates="invoice", uselist=False, cascade="all, delete-orphan")
 
 
