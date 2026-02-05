@@ -32,3 +32,13 @@ class ERPClient:
             r = await client.get(url, headers=self.headers)
             r.raise_for_status()
             return (r.json().get("data") or {})
+
+    async def delete_purchase_invoice(self, name: str) -> None:
+        """
+        Delete a Purchase Invoice from ERPNext.
+        Used for test cleanup.
+        """
+        url = f"{self.base}/api/resource/Purchase%20Invoice/{name}"
+        async with httpx.AsyncClient(timeout=20.0) as client:
+            r = await client.delete(url, headers=self.headers)
+            r.raise_for_status()
