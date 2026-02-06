@@ -8,7 +8,6 @@ from schemas.responses import ApiResponse
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
-
 @router.get("/summary", response_model=ApiResponse[dict])
 def dashboard_summary(
     request: Request,
