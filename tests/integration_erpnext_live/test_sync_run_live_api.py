@@ -24,11 +24,7 @@ class TestSyncRunLiveAPI(unittest.TestCase):
 
     def setUp(self):
         # --- Require ERPNext env (LIVE) ---
-        required = ["ERPNEXT_BASE_URL", "ERPNEXT_API_KEY", "ERPNEXT_API_SECRET"]
-        missing = [k for k in required if not os.getenv(k)]
-        if missing:
-            raise unittest.SkipTest(f"Missing ERPNext env vars: {', '.join(missing)}")
-
+        required = ["ERPNEXT_BASE_URL", "ERPNEXT_API_KEY", "ERPNEXT_API_SECRET"]        
         # --- Prevent background scheduler from starting during TestClient startup ---
         # (we test /sync/run explicitly, we don't want the background loop running)
         self._patch_sched_start = patch.object(app_module.scheduler, "start", new=AsyncMock())
