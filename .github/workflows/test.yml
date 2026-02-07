@@ -2,9 +2,9 @@ name: Test Suite
 
 on:
   push:
-    branches: [main, master, develop]
+    branches: [main]
   pull_request:
-    branches: [main, master, develop]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
           ERPNEXT_API_SECRET: "dummy"
           DATABASE_URL: "sqlite:///./ci_test.db"
         run: |
-          coverage run -m pytest tests/ -v
+          coverage run -m pytest tests/ -v --ignore=tests/integration_erpnext_live
           coverage xml
 
       - name: Upload coverage
