@@ -11,7 +11,6 @@ from controllers.health import router as health_router
 from controllers.invoices import router as invoices_router
 from controllers.risk import router as risk_router
 from controllers.sync import router as sync_router
-from controllers.test import router as test_router
 
 from services.scheduler import Scheduler
 
@@ -44,7 +43,6 @@ app.include_router(health_router)
 app.include_router(invoices_router)
 app.include_router(risk_router)
 app.include_router(sync_router)
-app.include_router(test_router)
 
 # --- Internal TTL cache store (in-memory) ---
 # Controllers/services can use: from helpers import cache_get/cache_set
